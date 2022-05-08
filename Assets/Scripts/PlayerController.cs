@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] GameObject bullet; // Bullet prefab that will be fired
     float bulletCooldown = 0.3f; // Time between each bullet fire
     float bulletLastFired = 0.0f; // Time when bullet was last fired
 
     bool isAiming = false; // True if the player is aiming with arrow keys or right joystick
+
+    
+    public GeneratorScript generator; // Current generator the player is in range of
+    bool isRepairing = false; // True if the player is holding the repair key (used to prevent movement and guns)
 
     float speed = 0.0f;       // Calculated speed of the player
     float speedBase = 10.0f;  // Default speed when moving
@@ -26,8 +30,23 @@ public class CharacterController : MonoBehaviour
             transform.Rotate(new Vector3(0.0f, angle, 0.0f) - transform.rotation.eulerAngles);
         }
 
+        // REPAIRING
+        if (generator != null)
+        {
+            if (Input.GetAxisRaw("Repair") != 0.0f && !isRepairing)
+            {
+                generator.Repair(true);
+                isRepairing = true;
+            }
+            if (Input.GetAxisRaw("Repair") == 0.0f && isRepairing)
+            {
+                generator.Repair(false);
+                isRepairing = false;
+            }
+        }
+
         // FIRING
-        if (Input.GetAxisRaw("Fire") != 0.0f)
+        if (Input.GetAxisRaw("Fire") != 0.0f && !isRepairing)
         {
             if (bulletLastFired + bulletCooldown <= Time.time)
             {
@@ -37,8 +56,9 @@ public class CharacterController : MonoBehaviour
             }
         }
 
+
         // MOVEMENT
-        if (Input.GetAxisRaw("MoveH") != 0.0f || Input.GetAxisRaw("MoveV") != 0.0f)
+        if ((Input.GetAxisRaw("MoveH") != 0.0f || Input.GetAxisRaw("MoveV") != 0.0f) && !isRepairing)
         {
             // Getting the direction that the player is moving as a normalised vector (only really matters if they are using a controller)
             Vector3 directionV3 = new Vector3(Input.GetAxisRaw("MoveH"), 0.0f, Input.GetAxisRaw("MoveV"));
@@ -51,9 +71,9 @@ public class CharacterController : MonoBehaviour
                 transform.Rotate(new Vector3(0.0f, angle, 0.0f) - transform.rotation.eulerAngles);
             }
 
-
             // Moving the player
-            transform.Translate(directionV3 * speedBase * Time.deltaTime, Space.World);
+            speed = speedBase;
+            transform.Translate(directionV3 * speed * Time.deltaTime, Space.World);
         }
 
         isAiming = false;

@@ -20,4 +20,13 @@ public class BulletScript : MonoBehaviour
         // Move bullet
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Generator")
+        {
+            other.GetComponent<GeneratorScript>().ModifyHealth(-2.5f);
+            Destroy(gameObject);
+        }
+    }
 }

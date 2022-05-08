@@ -23,6 +23,11 @@ public class BulletScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "Enemy")
+        {
+            other.GetComponent<EnemyHealth>().Damage();
+            Destroy(gameObject);
+        }
         if (other.tag == "Generator")
         {
             other.GetComponent<GeneratorScript>().PlayerShot();

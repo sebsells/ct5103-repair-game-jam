@@ -463,9 +463,11 @@ GameObject:
   - component: {fileID: 4055783370147086196}
   - component: {fileID: 5596062171028707193}
   - component: {fileID: 4996807874992954249}
+  - component: {fileID: 1055442266331899280}
+  - component: {fileID: 4422942499670424844}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -565,7 +567,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27a8df3e3dbba54b8d18fabda5fda53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 2.5
+--- !u!114 &1055442266331899280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5654464576586781022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de122a9176bf76049bed892f35902495, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 281713647318658647}
+  maxHealth: 15
+  playerDamage: 5
+--- !u!54 &4422942499670424844
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5654464576586781022}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &5914387472408924294
 GameObject:
   m_ObjectHideFlags: 0

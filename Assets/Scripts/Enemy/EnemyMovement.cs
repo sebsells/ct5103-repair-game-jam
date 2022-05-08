@@ -71,6 +71,7 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    // Called by triggers when something enters/exits their radius
     public void OnRadiusEnter(string name, Collider other)
     {
         // Checking for nearby player when attacking the gen
@@ -122,6 +123,15 @@ public class EnemyMovement : MonoBehaviour
         if (name == "GenCloseDetection" && other.tag == "Generator")
         {
             isAttackingGen = false;
+        }
+    }
+
+    // Called by the health script when the enemy is killed
+    public void StopAttacking()
+    {
+        if (trackedGen != null && isAttackingGen)
+        {
+            trackedGen.GetComponent<GeneratorScript>().EnemyAttack(false);
         }
     }
 }

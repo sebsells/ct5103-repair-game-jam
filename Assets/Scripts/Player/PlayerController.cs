@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     
     public GeneratorScript generator; // Current generator the player is in range of
+    GeneratorScript generatorRepairing = null; // Generator currently being repaired by the player
     bool isRepairing = false; // True if the player is holding the repair key (used to prevent movement and guns)
 
     float speed = 0.0f;       // Calculated speed of the player
@@ -30,23 +31,8 @@ public class PlayerController : MonoBehaviour
             transform.Rotate(new Vector3(0.0f, angle, 0.0f) - transform.rotation.eulerAngles);
         }
 
-        // REPAIRING
-        if (generator != null)
-        {
-            if (Input.GetAxisRaw("Repair") != 0.0f && !isRepairing)
-            {
-                generator.Repair(true);
-                isRepairing = true;
-            }
-            if (Input.GetAxisRaw("Repair") == 0.0f && isRepairing)
-            {
-                generator.Repair(false);
-                isRepairing = false;
-            }
-        }
-
         // FIRING
-        if (Input.GetAxisRaw("Fire") != 0.0f && !isRepairing)
+        if (Input.GetAxisRaw("Fire") != 0.0f)
         {
             if (bulletLastFired + bulletCooldown <= Time.time)
             {
@@ -54,6 +40,26 @@ public class PlayerController : MonoBehaviour
                 Instantiate(bullet, transform.position + bulletStartPos, transform.rotation); // Instantiating bullet
                 bulletLastFired = Time.time; // Resetting bullet timer
             }
+        }
+
+        // REPAIRING
+        // If player is in range of a generator
+        if (generator != null)
+        {
+            // And player is holding repair
+            if (Input.GetAxisRaw("Repair") != 0.0f && !isRepairing)
+            {
+                generatorRepairing = generator;
+                generatorRepairing.Repair(true);
+                isRepairing = true;
+            }
+        }
+        // If player is no longer in range of generator or lets go of the key
+        if ((Input.GetAxisRaw("Repair") == 0.0f || generator == null) && isRepairing)
+        {
+            generatorRepairing.Repair(false);
+            generatorRepairing = null;
+            isRepairing = false;
         }
 
 
@@ -73,7 +79,8 @@ public class PlayerController : MonoBehaviour
 
             // Moving the player
             speed = speedBase;
-            transform.Translate(directionV3 * speed * Time.deltaTime, Space.World);
+            GetComponent<Rigidbody>().position += directionV3 * speed * Time.deltaTime;
+            //transform.Translate(directionV3 * speed * Time.deltaTime, Space.World);
         }
 
         isAiming = false;

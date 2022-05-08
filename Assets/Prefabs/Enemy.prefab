@@ -611,7 +611,7 @@ GameObject:
   - component: {fileID: 1669138188154694229}
   - component: {fileID: 6005724875065614810}
   m_Layer: 0
-  m_Name: GenCloseDetection
+  m_Name: AttackDetection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

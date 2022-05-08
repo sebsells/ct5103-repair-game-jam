@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] GameObject bullet; // Bullet prefab that will be fired
+    [SerializeField] GameObject canvas; // Canvas of the player (used here to make sure it doesn't turn with player)
     float bulletCooldown = 0.3f; // Time between each bullet fire
     float bulletLastFired = 0.0f; // Time when bullet was last fired
 
@@ -83,6 +84,7 @@ public class PlayerController : MonoBehaviour
             //transform.Translate(directionV3 * speed * Time.deltaTime, Space.World);
         }
 
+        canvas.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f); // Making sure canvas isnt rotating with the player
         isAiming = false;
     }
 }

@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    // Note to self: this script requires a lot of null checking, and there is currently none, fix it
+
     // Enemy has radius around it and searches for the nearest player/generator
     // Player radius is smaller
 
     // Enemy prioritises player if both are in range
 
-    // If enemy reaches gen (GenCloseDetection), it will stop moving completely
+    // If enemy reaches gen (AttackDetection), it will stop moving completely
     // If player gets very close then the enemy will start chasing them
 
     [SerializeField] float speed = 5.0f; // How fast the enemy travels
@@ -31,12 +33,29 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
+        // If the enemy is attack a non existant generator, stop that
+        // This happens when the generator is destroyed
+        if (isAttackingGen && trackedGen == null)
+        {
+            // Stopping attack mode
+            isAttackingGen = false;
+
+            // Removing generator from list of generators that the enemy thinks exist
+            foreach (GameObject gen in generatorsInRange)
+            {
+                if (gen == null)
+                {
+                    generatorsInRange.Remove(gen);
+                    break;
+                }
+            }
+        }
+
         // If the enemy is tracking the player, make them the target position
         if (trackedPlayer != null)
         {
             targetPos = trackedPlayer.transform.position;
         }
-
         // If the enemy is tracking generators, make the closest one the target
         else if (generatorsInRange.Count >= 1)
         {
@@ -56,7 +75,6 @@ public class EnemyMovement : MonoBehaviour
             // Closest gen becomes targer
             targetPos = trackedGen.transform.position;
         }
-
         // If the enemy is tracking nothing, walk to centre of the map
         else
         {
@@ -88,13 +106,18 @@ public class EnemyMovement : MonoBehaviour
         if (!isAttackingGen)
         {
             // Checking if enemy has reached the generator
-            if (name == "GenCloseDetection" && other.tag == "Generator")
+            if (name == "AttackDetection" && other.tag == "Generator")
             {
                 Debug.Log("starting attack");
                 trackedPlayer = null; // Stop tracking player
                 other.GetComponent<GeneratorScript>().EnemyAttack(true); // Start damaging the generator
                 isAttackingGen = true; // Set attacking gen to true, so the enemy will stop tracking gens/the player
                 return;
+            }
+            // Checking if enemy has reached the player
+            if (name == "AttackDetection" && other.tag == "Player")
+            {
+                other.GetComponent<PlayerHealth>().DamagePlayer(); // Damaging player
             }
 
             // Checking for nearby player/generator
@@ -120,7 +143,7 @@ public class EnemyMovement : MonoBehaviour
         {
             trackedPlayer = null;
         }
-        if (name == "GenCloseDetection" && other.tag == "Generator")
+        if (name == "AttackDetection" && other.tag == "Generator")
         {
             isAttackingGen = false;
         }

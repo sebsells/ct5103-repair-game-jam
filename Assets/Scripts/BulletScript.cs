@@ -25,7 +25,7 @@ public class BulletScript : MonoBehaviour
     {
         if (other.tag == "Generator")
         {
-            other.GetComponent<GeneratorScript>().ModifyHealth(-2.5f);
+            other.GetComponent<GeneratorScript>().PlayerShot();
             Destroy(gameObject);
         }
     }

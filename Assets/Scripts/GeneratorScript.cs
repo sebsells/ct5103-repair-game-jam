@@ -8,15 +8,16 @@ public class GeneratorScript : MonoBehaviour
     [SerializeField] Slider slider; // Health bar slider
 
     [SerializeField] float maxHealth = 100.0f;      // Maximum health of generator
-    [SerializeField] float playerHealRate = 10.0f;  // How fast the player can repair the generator
-    [SerializeField] float enemyDamageRate = 5.0f;  // How fast enemies damage the generator
+    [SerializeField] float playerHealRate = 30.0f;  // How fast the player can repair the generator
+    [SerializeField] float enemyDamageRate = 15.0f; // How fast enemies damage the generator
+    [SerializeField] float playerShotDMG = 2.5f;    // How much damage the gen takes when shot by the player
 
     private float currentHealth; // Current amount of health of the generator
     private float currentHealthRate; // Current amount of health being lost/gained by the generator
 
     private void Start()
     {
-        currentHealth = maxHealth/2; // Giving generator max health
+        currentHealth = maxHealth; // Giving generator max health
         currentHealthRate = 0.0f; // Generator shouldn't be losing or gaining health at this current time
     }
 
@@ -38,30 +39,6 @@ public class GeneratorScript : MonoBehaviour
         }
     }
 
-    // Called by the player when repairing
-    public void Repair(bool repairing)
-    {
-        if (repairing)
-        {
-            currentHealthRate += playerHealRate;
-        }
-        else
-        {
-            currentHealthRate -= playerHealRate;
-        }
-    }
-
-    // Generic method for changing the generators health rate
-    public void ModifyHealthRate(float rate)
-    {
-        currentHealthRate += rate;
-    }
-    // Used by bullets to directly modify the health, instead of over time
-    public void ModifyHealth(float health)
-    {
-        currentHealth += health;
-    }
-
     // Gets called by the trigger script
     // Trigger is a separate entity & script because it caused issues when it was shot by the player
     public void OnGenTriggerEnter(Collider other)
@@ -76,6 +53,36 @@ public class GeneratorScript : MonoBehaviour
         if (other.tag == "Player")
         {
             other.GetComponent<PlayerController>().generator = null;
+        }
+    }
+
+    // Called by the player when repairing
+    public void Repair(bool repairing)
+    {
+        if (repairing)
+        {
+            currentHealthRate += playerHealRate;
+        }
+        else
+        {
+            currentHealthRate -= playerHealRate;
+        }
+    }
+    // Called by bullet when gen is shot
+    public void PlayerShot()
+    {
+        currentHealth -= playerShotDMG;
+    }
+    // Called by enemy when attack starts
+    public void EnemyAttack(bool attacking)
+    {
+        if (attacking)
+        {
+            currentHealthRate -= enemyDamageRate;
+        }
+        else
+        {
+            currentHealthRate += enemyDamageRate;
         }
     }
 }

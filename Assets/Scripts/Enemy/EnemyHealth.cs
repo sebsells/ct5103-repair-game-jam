@@ -22,11 +22,18 @@ public class EnemyHealth : MonoBehaviour
         // Updating health bar
         slider.value = health / maxHealth;
 
-        // If health reaches 0 then destroy self
+        // If health reaches 0 then die
         if (health <= 0.0f)
         {
-            GetComponent<EnemyMovement>().StopAttacking(); // Stop damaging generator
-            Destroy(gameObject); // Destroy self
+            // Stop damaging generator
+            GetComponent<EnemyMovement>().StopAttacking();
+
+            // Looking for the enemy spawn manager, to notify it an enemy has died
+            GameObject[] spawnerLookup = GameObject.FindGameObjectsWithTag("EnemySpawnManager"); // Finding spawner
+            spawnerLookup[0].GetComponent<EnemySpawner>().EnemyKilled(); // Notifying it
+
+            // Destroy self
+            Destroy(gameObject);
         }
     }
 

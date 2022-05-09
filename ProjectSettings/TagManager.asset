@@ -8,6 +8,8 @@ TagManager:
   - Bullet
   - GeneratorTrigger
   - Enemy
+  - EnemySpawn
+  - EnemySpawnManager
   layers:
   - Default
   - TransparentFX

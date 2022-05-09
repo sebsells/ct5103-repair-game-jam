@@ -96,7 +96,7 @@ public class EnemyMovement : MonoBehaviour
         // This overrides the attacking gen flag
         if (name == "PlayerCloseDetection" && other.tag == "Player" && isAttackingGen)
         {
-            Debug.Log("stopping attack");
+            isAttackingGen = false;
             trackedPlayer = other.gameObject; // Start tracking player
             trackedGen.GetComponent<GeneratorScript>().EnemyAttack(false); // Stop damaging gen
             return;

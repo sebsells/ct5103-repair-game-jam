@@ -108,7 +108,6 @@ public class EnemyMovement : MonoBehaviour
             // Checking if enemy has reached the generator
             if (name == "AttackDetection" && other.tag == "Generator")
             {
-                Debug.Log("starting attack");
                 trackedPlayer = null; // Stop tracking player
                 other.GetComponent<GeneratorScript>().EnemyAttack(true); // Start damaging the generator
                 isAttackingGen = true; // Set attacking gen to true, so the enemy will stop tracking gens/the player

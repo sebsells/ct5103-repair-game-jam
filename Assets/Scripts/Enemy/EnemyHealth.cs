@@ -28,9 +28,9 @@ public class EnemyHealth : MonoBehaviour
             // Stop damaging generator
             GetComponent<EnemyMovement>().StopAttacking();
 
-            // Looking for the enemy spawn manager, to notify it an enemy has died
-            GameObject[] spawnerLookup = GameObject.FindGameObjectsWithTag("EnemySpawnManager"); // Finding spawner
-            spawnerLookup[0].GetComponent<EnemySpawner>().EnemyKilled(); // Notifying it
+            // Looking for the game manager, to notify it that an enemy has died
+            GameObject[] managerLookup = GameObject.FindGameObjectsWithTag("GameManager"); // Finding manager
+            managerLookup[0].GetComponent<GameManager>().EnemyKill(); // Notifying it
 
             // Destroy self
             Destroy(gameObject);

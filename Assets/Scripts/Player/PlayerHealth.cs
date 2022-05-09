@@ -29,12 +29,6 @@ public class PlayerHealth : MonoBehaviour
             health = maxHealth;
         }
 
-        // Check if player has died
-        if (health <= 0.0f)
-        {
-            // die code here
-        }
-
         // Check if player is below max hp and has survived long enough to start regen
         if (health < maxHealth && lastHitTime + regenCooldown <= Time.time)
         {
@@ -48,5 +42,11 @@ public class PlayerHealth : MonoBehaviour
     {
         health -= enemyDamage; // Dropping player health
         lastHitTime = Time.time; // Resetting regen cooldown
+    }
+
+    // Used by gamemanager to see if player is dead
+    public float GetHealth()
+    {
+        return health;
     }
 }
